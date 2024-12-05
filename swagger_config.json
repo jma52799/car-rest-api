@@ -1,0 +1,223 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Product Service API",
+    "description": "API for managing products in the car catalog",
+    "version": "1.0.0"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "List all products or filter products",
+        "description": "Returns a list of all products or filters products based on query parameters such as name, category, price, model_year, quantity, or brand",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string",
+            "description": "Filter products by name"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "type": "string",
+            "description": "Filter products by category (e.g., SUV, Sedan). Acceptable values: UNKNOWN, SUV, SEDAN, SPORTS"
+          },
+          {
+            "name": "price",
+            "in": "query",
+            "type": "number",
+            "format": "float",
+            "description": "Filter products by price"
+          },
+          {
+            "name": "model_year",
+            "in": "query",
+            "type": "integer",
+            "description": "Filter products by model year"
+          },
+          {
+            "name": "quantity",
+            "in": "query",
+            "type": "integer",
+            "description": "Filter products by quantity"
+          },
+          {
+            "name": "brand",
+            "in": "query",
+            "type": "string",
+            "description": "Filter products by brand. Acceptable values: UNKNOWN, TOYOTA, HONDA, FORD, CHEVROLET, BMW, MERCEDES, AUDI, TESLA, VOLKSWAGEN, NISSAN"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of products",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new product",
+        "description": "Creates a new product and adds it to the catalog",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Product object to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Product created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/products/{product_id}": {
+      "get": {
+        "summary": "Get a product by ID",
+        "description": "Returns a product by its ID",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the product to fetch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product details",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a product",
+        "description": "Updates an existing product",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the product to update"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated product object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product updated successfully"
+          },
+          "404": {
+            "description": "Product not found"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a product",
+        "description": "Deletes a product by its ID",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the product to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Product deleted successfully"
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Product": {
+      "type": "object",
+      "required": [
+        "name",
+        "brand",
+        "category",
+        "description",
+        "price",
+        "model_year",
+        "quantity"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique identifier for the product"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the product"
+        },
+        "brand": {
+          "type": "string",
+          "description": "Brand of the product. Acceptable values: UNKNOWN, TOYOTA, HONDA, FORD, CHEVROLET, BMW, MERCEDES, AUDI, TESLA, VOLKSWAGEN, NISSAN"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category of the product (e.g., SUV, Sedan). Acceptable values: UNKNOWN, SUV, SEDAN, SPORTS"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the product"
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "description": "Price of the product"
+        },
+        "model_year": {
+          "type": "integer",
+          "description": "Model year of the product"
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Quantity of the product available in stock"
+        }
+      }
+    }
+  }
+}
