@@ -36,7 +36,14 @@ jobs:
           pip install pytest-cov  # Install pytest-cov for coverage report
 
       - name: Set up database URL
-        run: echo "DATABASE_URI=postgresql://postgres:Ma0919213023@localhost:5432/test_db" >> $GITHUB_ENV
+        run: echo "DATABASE_URI=postgresql://postgres:Ma0919213023@postgres:5432/test_db" >> $GITHUB_ENV
+
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h postgres -p 5432; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 1
+          done
 
       - name: Run unit tests with pytest
         run: pytest --maxfail=5 --disable-warnings --cov=service
